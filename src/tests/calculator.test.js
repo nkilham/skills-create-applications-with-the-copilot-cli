@@ -2,13 +2,13 @@
  * calculator.test.js — Comprehensive unit tests for calculator.js
  *
  * Supported operations under test:
- *   add        (+)  — Addition
- *   subtract   (-)  — Subtraction
- *   multiply   (*)  — Multiplication
- *   divide     (÷)  — Division
- *   modulo     (%)  — Modulo
- *   power      (^)  — Power
- *   squareRoot (√)  — Square Root
+ *   add        (+)   — Addition
+ *   subtract   (-)   — Subtraction
+ *   multiply   (*)   — Multiplication
+ *   divide     (÷)   — Division
+ *   modulo     (%)   — Modulo
+ *   power      (**)  — Exponentiation
+ *   squareRoot (√)   — Square Root
  *
  * Base examples from spec images:
  *   2  + 3  = 5
@@ -220,18 +220,22 @@ describe('modulo', () => {
   });
 });
 
-// ─── Power (^) ────────────────────────────────────────────────────────────────
+// ─── Power (**) ───────────────────────────────────────────────────────────────
 describe('power', () => {
   // Base case from image: 2 ^ 3 = 8
-  test('2 ^ 3 = 8', () => {
+  test('2 ** 3 = 8', () => {
     expect(power(2, 3)).toBe(8);
   });
 
-  test('raises a number to the power of 1 returns itself', () => {
+  test('2 ** 8 = 256', () => {
+    expect(power(2, 8)).toBe(256);
+  });
+
+  test('any number raised to the power of 1 is itself', () => {
     expect(power(5, 1)).toBe(5);
   });
 
-  test('raises a number to the power of 0 returns 1', () => {
+  test('any number raised to the power of 0 is 1', () => {
     expect(power(99, 0)).toBe(1);
   });
 
@@ -239,19 +243,19 @@ describe('power', () => {
     expect(power(2, -2)).toBeCloseTo(0.25);
   });
 
-  test('raises a negative base to an even exponent yields positive', () => {
+  test('negative base with even exponent returns positive', () => {
     expect(power(-3, 2)).toBe(9);
   });
 
-  test('raises a negative base to an odd exponent yields negative', () => {
+  test('negative base with odd exponent returns negative', () => {
     expect(power(-2, 3)).toBe(-8);
   });
 
-  test('raises zero to any positive power returns zero', () => {
+  test('0 raised to any positive power is 0', () => {
     expect(power(0, 5)).toBe(0);
   });
 
-  test('raises a number to a fractional exponent (square root)', () => {
+  test('fractional exponent (square root via power)', () => {
     expect(power(9, 0.5)).toBeCloseTo(3);
   });
 });
@@ -261,6 +265,10 @@ describe('squareRoot', () => {
   // Base case from image: √16 = 4
   test('√16 = 4', () => {
     expect(squareRoot(16)).toBe(4);
+  });
+
+  test('square root of 25 is 5', () => {
+    expect(squareRoot(25)).toBe(5);
   });
 
   test('square root of 0 is 0', () => {
@@ -275,7 +283,11 @@ describe('squareRoot', () => {
     expect(squareRoot(81)).toBe(9);
   });
 
-  test('square root of a non-perfect square', () => {
+  test('square root of a large number', () => {
+    expect(squareRoot(1_000_000)).toBe(1000);
+  });
+
+  test('square root of 2 is approximately 1.4142', () => {
     expect(squareRoot(2)).toBeCloseTo(1.4142, 4);
   });
 
@@ -285,10 +297,10 @@ describe('squareRoot', () => {
 
   // Edge case: negative numbers
   test('throws an error for negative numbers', () => {
-    expect(() => squareRoot(-1)).toThrow('Cannot take the square root of a negative number');
+    expect(() => squareRoot(-1)).toThrow('Square root of a negative number is not allowed');
   });
 
   test('throws an error for large negative numbers', () => {
-    expect(() => squareRoot(-100)).toThrow('Cannot take the square root of a negative number');
+    expect(() => squareRoot(-100)).toThrow('Square root of a negative number is not allowed');
   });
 });

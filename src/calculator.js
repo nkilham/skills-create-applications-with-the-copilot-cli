@@ -4,25 +4,25 @@
  * calculator.js — Node.js CLI Calculator
  *
  * Supported operations:
- *   add        (+)  — Addition:       returns the sum of two numbers
- *   subtract   (-)  — Subtraction:    returns the difference of two numbers
- *   multiply   (x)  — Multiplication: returns the product of two numbers
- *   divide     (÷)  — Division:       returns the quotient of two numbers
- *   modulo     (%)  — Modulo:         returns the remainder of a divided by b
- *   power      (^)  — Power:          returns base raised to the exponent
- *   squareRoot (√)  — Square Root:    returns the square root of n
+ *   add        (+)   — Addition:        returns the sum of two numbers
+ *   subtract   (-)   — Subtraction:     returns the difference of two numbers
+ *   multiply   (x)   — Multiplication:  returns the product of two numbers
+ *   divide     (÷)   — Division:        returns the quotient of two numbers
+ *   modulo     (%)   — Modulo:          returns the remainder of a divided by b
+ *   power      (**)  — Exponentiation:  returns base raised to the exponent
+ *   squareRoot (√)   — Square Root:     returns the square root of n
  *
  * Usage:
  *   node src/calculator.js <operation> <num1> [num2]
  *
  * Examples:
- *   node src/calculator.js add 5 3           → 8
- *   node src/calculator.js subtract 9 4     → 5
- *   node src/calculator.js multiply 3 7     → 21
- *   node src/calculator.js divide 10 2      → 5
- *   node src/calculator.js modulo 10 3      → 1
- *   node src/calculator.js power 2 8        → 256
- *   node src/calculator.js squareRoot 16    → 4
+ *   node src/calculator.js add 5 3            → 8
+ *   node src/calculator.js subtract 9 4       → 5
+ *   node src/calculator.js multiply 3 7       → 21
+ *   node src/calculator.js divide 10 2        → 5
+ *   node src/calculator.js modulo 10 3        → 1
+ *   node src/calculator.js power 2 8          → 256
+ *   node src/calculator.js squareRoot 25      → 5
  */
 
 // Addition (+): returns the sum of a and b
@@ -50,6 +50,7 @@ function divide(a, b) {
 }
 
 // Modulo (%): returns the remainder of a divided by b
+// Throws an error if b is zero to prevent division by zero
 function modulo(a, b) {
   if (b === 0) {
     throw new Error('Modulo by zero is not allowed');
@@ -57,7 +58,7 @@ function modulo(a, b) {
   return a % b;
 }
 
-// Power (^): returns base raised to the exponent
+// Power (**): returns base raised to the exponent
 function power(base, exponent) {
   return Math.pow(base, exponent);
 }
@@ -66,13 +67,10 @@ function power(base, exponent) {
 // Throws an error if n is negative
 function squareRoot(n) {
   if (n < 0) {
-    throw new Error('Cannot take the square root of a negative number');
+    throw new Error('Square root of a negative number is not allowed');
   }
   return Math.sqrt(n);
 }
-
-// Single-argument operations (only require one numeric input)
-const singleArgOps = new Set(['squareRoot']);
 
 // Map of supported operation names to their functions
 const operations = { add, subtract, multiply, divide, modulo, power, squareRoot };
@@ -98,10 +96,11 @@ function main() {
     process.exit(1);
   }
 
-  if (singleArgOps.has(op)) {
+  // squareRoot only requires one argument
+  if (op === 'squareRoot') {
     try {
-      const result = operations[op](a);
-      console.log(`${op}(${a}) = ${result}`);
+      const result = squareRoot(a);
+      console.log(`squareRoot(${a}) = ${result}`);
     } catch (err) {
       console.error(`Error: ${err.message}`);
       process.exit(1);
@@ -110,7 +109,7 @@ function main() {
   }
 
   if (rawB === undefined) {
-    console.error(`Operation "${op}" requires two numbers`);
+    console.error('num2 is required for this operation');
     process.exit(1);
   }
 
