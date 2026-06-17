@@ -77,6 +77,9 @@ function main() {
   }
 }
 
-main();
+// Only run CLI logic when executed directly (not when imported as a module)
+if (require.main === module) {
+  main();
+}
 
 module.exports = { add, subtract, multiply, divide };
